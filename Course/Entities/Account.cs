@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Course.Entities.Exceptions;
 
 
 namespace Course.Entities.Exceptions
@@ -8,14 +8,14 @@ namespace Course.Entities.Exceptions
         public int Number { get; set; }
         public string Holder { get; set; }
         public double Balance { get; set; }
-        public double WithLimit { get; set; }
+        public double WithDrawLimit { get; set; }
 
-        public Account(int number, string holder, double balance, double withLimit)
+        public Account(int number, string holder, double balance, double withDrawLimit)
         {
             Number = number;
             Holder = holder;
             Balance = balance;
-            WithLimit = withLimit;
+            WithDrawLimit = withDrawLimit;
         }
 
         public void Deposit(double amount)
@@ -24,13 +24,13 @@ namespace Course.Entities.Exceptions
         }
         public void WithDraw(double amount)
         {
-            if(Balance <= amount)
-            {
-                throw new DomainException("Not enough balance");
-            }
-            else if (WithLimit >= amount)
+            if (amount > WithDrawLimit)
             {
                 throw new DomainException("The amount exceeds withdraw limit");
+            }
+            if (amount > Balance)
+            {
+                throw new DomainException("Not enough balance");
             }
 
             Balance -= amount;
